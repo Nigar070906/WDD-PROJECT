@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #FF0000, #d80000, #b20000);
+      color: white;
+      height: 100vh;
+      padding-top: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar .profile {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .sidebar .profile img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .sidebar .profile h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 40px;
+      transition: margin-left 0.3s;
+    }
+
+    .toggle-btn {
+      background-color: #FF0000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 1rem;
+      z-index: 1001;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+      max-width: 100%;
+    }
+
+    .dark-mode .card {
+      background-color: #1e1e1e;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 60vh !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 80px 20px 20px;
+      }
+
+      .menu-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: #FF0000;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 1rem;
+        border-radius: 5px;
+        z-index: 1001;
+        cursor: pointer;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <div class="profile">
+      <img src="C:\Users\malek\OneDrive\Desktop\Hash Dash\image\manali.jpg" alt="Profile Picture">
+      <h3>Manali Patel</h3>
+    </div>
+    <h2>Dashboard</h2>
+    <a href="index.html">Home</a>
+    <a href="overview.html">Overview</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="twitter.html">Twitter</a>
+    <a href="linkedin.html">LinkedIn</a>
+    <a href="youtube.html" class="active">YouTube</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <div class="main-content">
+    <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <h1>YouTube Analytics</h1>
+    <div class="card">
+      <canvas id="youtubeChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('youtubeChart').getContext('2d');
+
+    const youtubeChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Views', 'Likes', 'Comments', 'Shares', 'Subscribers'],
+        datasets: [{
+          label: 'YouTube Metrics',
+          data: generateRandomData(),
+          backgroundColor: '#FF0000'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'YouTube Channel Performance',
+            color: getComputedStyle(document.body).color
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: getComputedStyle(document.body).color
+            }
+          },
+          x: {
+            ticks: {
+              color: getComputedStyle(document.body).color
+            }
+          }
+        }
+      }
+    });
+
+    function generateRandomData() {
+      return Array.from({ length: 5 }, () => Math.floor(Math.random() * 3000) + 200);
+    }
+
+    setInterval(() => {
+      youtubeChart.data.datasets[0].data = generateRandomData();
+      youtubeChart.update();
+    }, 3000);
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      youtubeChart.options.plugins.title.color = getComputedStyle(document.body).color;
+      youtubeChart.options.scales.x.ticks.color = getComputedStyle(document.body).color;
+      youtubeChart.options.scales.y.ticks.color = getComputedStyle(document.body).color;
+      youtubeChart.update();
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+  </script>
+
+</body>
+
+</html>

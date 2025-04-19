@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #0077b5, #005c8a, #003d5b);
+      color: white;
+      height: 100vh;
+      padding-top: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar.hide {
+      transform: translateX(-100%);
+    }
+
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #0077b5;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .sidebar .profile {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .sidebar .profile img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .sidebar .profile h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      transition: margin-left 0.3s;
+    }
+
+    .toggle-btn {
+      background-color: #0077b5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 1rem;
+      z-index: 10;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+      height: 500px;
+    }
+
+    .dark-mode .card {
+      background-color: #1e1e1e;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 80px 20px 20px 20px;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .toggle-btn {
+        top: 20px;
+        right: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <div class="sidebar" id="sidebar">
+    <div class="profile">
+      <img src="C:\Users\malek\OneDrive\Desktop\Hash Dash\image\nigar1.jpg" alt="Profile Picture">
+      <h3>Malek Nigar</h3>
+    </div>
+    <h2>Dashboard</h2>
+    <a href="index.html">Home</a>
+    <a href="overview.html">Overview</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="twitter.html">Twitter</a>
+    <a href="linkedin.html" class="active">LinkedIn</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <div class="main-content">
+    <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <h1>LinkedIn Analytics</h1>
+    <div class="card">
+      <canvas id="linkedinChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('show');
+    }
+
+    const ctx = document.getElementById('linkedinChart').getContext('2d');
+
+    const linkedinChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Profile Views', 'Connections', 'Posts', 'Comments', 'Shares'],
+        datasets: [{
+          label: 'Weekly Activity',
+          data: generateRandomData(),
+          backgroundColor: '#0077b5'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'LinkedIn Weekly Engagement',
+            color: getComputedStyle(document.body).color
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: getComputedStyle(document.body).color
+            }
+          },
+          x: {
+            ticks: {
+              color: getComputedStyle(document.body).color
+            }
+          }
+        }
+      }
+    });
+
+    function generateRandomData() {
+      return Array.from({ length: 5 }, () => Math.floor(Math.random() * 1500) + 100);
+    }
+
+    setInterval(() => {
+      linkedinChart.data.datasets[0].data = generateRandomData();
+      linkedinChart.update();
+    }, 3000);
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      linkedinChart.options.plugins.title.color = getComputedStyle(document.body).color;
+      linkedinChart.options.scales.x.ticks.color = getComputedStyle(document.body).color;
+      linkedinChart.options.scales.y.ticks.color = getComputedStyle(document.body).color;
+      linkedinChart.update();
+    }
+  </script>
+
+</body>
+
+</html>

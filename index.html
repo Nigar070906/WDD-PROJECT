@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - Social Media Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9;
+      color: #2c3e50;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #d1d1d1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background-color: #1e2a3a;
+      color: white;
+      height: 100vh;
+      padding-top: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar .profile {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar .profile img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .sidebar .profile h3 {
+      font-size: 18px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 16px;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #34495e;
+    }
+
+    .sidebar a.active {
+      background-color: #3498db;
+    }
+
+    .menu-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #1e2a3a;
+      color: white;
+      padding: 10px 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      z-index: 1100;
+      cursor: pointer;
+    }
+
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .dark-mode-toggle {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 1.1rem;
+      z-index: 1000;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 2.5rem;
+    }
+
+    p,
+    li {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    .main-logo {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .main-logo img {
+      width: 400px;
+      transition: transform 0.3s ease;
+    }
+
+    .main-logo img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 100px 20px 40px;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      h1{
+        font-size: large;
+      }
+
+      .main-logo img {
+      width: 200px;
+      transition: transform 0.3s ease;
+    }
+
+    p,
+    li {
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <div class="sidebar" id="sidebar">
+    <div class="profile">
+      <img src="logo.jpg" alt="Profile" />
+      <h3>Social Media</h3>
+    </div>
+    <h2>Dashboard</h2>
+    <a href="index.html" class="active">Home</a>
+    <a href="overview.html">Overview</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="instagram.html">Instagram</a>
+    <a href="twitter.html">Twitter</a>
+    <a href="linkedin.html">LinkedIn</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <div class="main-content">
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+    <h1>Welcome to Your Social Media Dashboard</h1>
+    <p>This dashboard helps you manage and monitor all your social media accounts in one place. Track your performance, engagement, and insights for platforms like Instagram, Facebook, Twitter, YouTube, and LinkedIn.</p>
+    <ul>
+      <li>Real-time analytics from all platforms</li>
+      <li>Beautiful charts and graphs to track progress</li>
+      <li>Dark mode support</li>
+      <li>Simple and intuitive UI</li>
+    </ul>
+
+    <div class="main-logo">
+      <img src="logo.jpg" alt="ASMBoard Logo" />
+    </div>
+  </div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+  </script>
+</body>
+
+</html>

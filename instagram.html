@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instagram Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #E1306C, #833ab4, #fd1d1d);
+      color: white;
+      height: 100vh;
+      padding-top: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar .profile {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .sidebar .profile img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .sidebar .profile h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .toggle-btn, .menu-btn {
+      background-color: #E1306C;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      z-index: 1001;
+    }
+
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+    }
+
+    .menu-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+      margin-top: 3rem;
+    }
+
+    .dark-mode .card {
+      background-color: #1e1e1e;
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+      h1{
+        font-size: medium;
+        margin-top: 3rem;
+      }
+      .toggle-btn {
+      position: fixed;
+      top: 5px;
+      right: 10px;
+    }
+
+    }
+  </style>
+</head>
+<body>
+
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+  <div class="sidebar" id="sidebar">
+    <div class="profile">
+      <img src="C:\Users\malek\OneDrive\Desktop\Hash Dash\image\nigar1.jpg" alt="Profile Picture" />
+      <h3>Malek Nigar</h3>
+    </div>
+    <h2>Dashboard</h2>
+    <a href="index.html">Home</a>
+    <a href="overview.html">Overview</a>
+    <a href="facebook.html">Facebook</a>
+    <a href="instagram.html" class="active">Instagram</a>
+    <a href="twitter.html">Twitter</a>
+    <a href="linkedin.html">LinkedIn</a>
+    <a href="youtube.html">YouTube</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <div class="main-content">
+    <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <h1>Instagram Analytics</h1>
+    <div class="card">
+      <canvas id="instaChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('instaChart').getContext('2d');
+
+    const instaChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Likes', 'Comments', 'Views', 'Follows'],
+        datasets: [{
+          label: 'Instagram Metrics',
+          data: generateRandomData(),
+          backgroundColor: '#E1306C'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Instagram Insights',
+            color: getComputedStyle(document.body).color
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: getComputedStyle(document.body).color
+            }
+          },
+          x: {
+            ticks: {
+              color: getComputedStyle(document.body).color
+            }
+          }
+        }
+      }
+    });
+
+    function generateRandomData() {
+      return Array.from({ length: 4 }, () => Math.floor(Math.random() * 500) + 100);
+    }
+
+    setInterval(() => {
+      instaChart.data.datasets[0].data = generateRandomData();
+      instaChart.update();
+    }, 3000);
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      instaChart.options.plugins.title.color = getComputedStyle(document.body).color;
+      instaChart.options.scales.x.ticks.color = getComputedStyle(document.body).color;
+      instaChart.options.scales.y.ticks.color = getComputedStyle(document.body).color;
+      instaChart.update();
+    }
+
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>
